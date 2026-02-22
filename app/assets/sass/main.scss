@@ -1,0 +1,397 @@
+// Import the NHS.UK frontend library
+@import "nhsuk-frontend/dist/nhsuk";
+
+// =========================================================
+// NHSBT Colour Variables (from nhsbt.nhs.uk)
+// =========================================================
+
+$color-nhsbt-dark-blue: #003087;
+$color-nhsbt-blue: #005EB8;
+$color-nhsbt-light-blue: #41B6E6;
+$color-nhsbt-red: #d81e05;
+$color-nhsbt-green: #009639;
+$color-nhsbt-yellow: #FAE100;
+$color-nhsbt-pink: #56008c;
+$color-nhsbt-orange: #f59c00;
+$color-nhsbt-orange-text: #a66704;
+$color-nhsbt-dark-grey: #231F20;
+$color-nhsbt-grey: #5f5f5f;
+$color-nhsbt-pale-grey: #F0F4F5;
+$color-nhsbt-border-grey: #D8DDE0;
+$color-nhsbt-white: #FFFFFF;
+$color-nhsbt-black: #000000;
+
+// =========================================================
+// NHSBT Header (matches nhsbt.nhs.uk exactly)
+// White bg, box-shadow, logo at 40px, 84px height
+// =========================================================
+
+.nhsbt-header {
+  position: relative;
+  z-index: 800;
+  background-color: $color-nhsbt-white;
+  box-shadow: 0 0 10px 3px rgba(0, 0, 0, 0.18);
+  padding: 15px 0;
+  height: auto;
+}
+
+.nhsbt-header__container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.nhsbt-header__logo {
+  display: flex;
+  align-items: center;
+}
+
+.nhsbt-header__link {
+  display: inline-block;
+  text-decoration: none;
+  color: $color-nhsbt-blue;
+
+  &:hover {
+    text-decoration: underline;
+  }
+
+  &:focus {
+    outline: 3px solid $color-nhsbt-black;
+    outline-offset: 0;
+    background-color: transparent;
+    box-shadow: none;
+  }
+}
+
+// Logo: 40px tall — exact match to .primary-header__logo img { height: 40px }
+.nhsbt-header__logo-img {
+  height: 40px;
+  width: auto;
+  display: block;
+}
+
+// =========================================================
+// NHSBT Navigation / Service Name Bar (blue bar below header)
+// =========================================================
+
+.nhsbt-nav-bar {
+  background-color: $color-nhsbt-blue;
+  padding: 10px 0;
+}
+
+.nhsbt-nav-bar__link {
+  color: $color-nhsbt-white;
+  font-size: 17px;
+  font-weight: 700;
+  text-decoration: none;
+  display: inline-block;
+
+  &:hover {
+    text-decoration: underline;
+    color: $color-nhsbt-white;
+  }
+
+  &:visited {
+    color: $color-nhsbt-white;
+  }
+
+  &:focus {
+    outline: 3px solid $color-nhsbt-black;
+    outline-offset: 0;
+    color: $color-nhsbt-black;
+    background-color: $color-nhsbt-yellow;
+    box-shadow: none;
+    text-decoration: none;
+  }
+}
+
+// =========================================================
+// NHSBT Footer (matches nhsbt.nhs.uk exactly)
+// =========================================================
+
+.nhsbt-footer {
+  background-color: $color-nhsbt-pale-grey;
+  border-top: none;
+  padding: 32px 0 24px;
+  margin-top: 48px;
+}
+
+.nhsbt-footer__back-to-top {
+  display: block;
+  text-align: right;
+  padding: 8px 0;
+  color: $color-nhsbt-blue;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 600;
+  max-width: 960px;
+  margin: 0 auto 8px;
+  padding-right: 16px;
+
+  &:hover {
+    text-decoration: underline;
+  }
+
+  &:focus {
+    outline: 3px solid $color-nhsbt-black;
+    background-color: $color-nhsbt-yellow;
+    color: $color-nhsbt-black;
+  }
+}
+
+// --- Footer nav links (centered, separated by right borders) ---
+.nhsbt-footer__links {
+  text-align: center;
+  margin-bottom: 15px;
+  overflow: hidden;
+}
+
+.nhsbt-footer__link-list {
+  list-style: none;
+  margin: 0 -2px;
+  padding: 4px 0 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  overflow: hidden;
+
+  li {
+    font-size: 14px;
+    line-height: 1;
+    padding: 0 10px;
+    margin: 0 1px 8px -1px;
+    border-right: 1px solid $color-nhsbt-black;
+    flex: 1 1 auto;
+
+    &:last-child {
+      border-right: none;
+    }
+  }
+
+  a {
+    color: $color-nhsbt-black;
+    padding: 0 5px;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+
+    &:focus {
+      outline: 3px solid $color-nhsbt-black;
+      outline-offset: 0;
+      color: $color-nhsbt-black;
+      background-color: $color-nhsbt-yellow;
+      box-shadow: none;
+      text-decoration: none;
+    }
+  }
+}
+
+// --- Social media icons (right-aligned) ---
+.nhsbt-footer__social {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-bottom: 24px;
+}
+
+.nhsbt-footer__social-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  min-width: 36px;
+  min-height: 36px;
+  max-width: 36px;
+  max-height: 36px;
+  background-color: $color-nhsbt-dark-blue;
+  border-radius: 50%;
+  color: $color-nhsbt-white;
+  text-decoration: none;
+  padding: 0;
+  overflow: hidden;
+
+  &:hover {
+    background-color: $color-nhsbt-blue;
+  }
+
+  &:focus {
+    outline: 3px solid $color-nhsbt-black;
+    outline-offset: 0;
+    background-color: $color-nhsbt-yellow;
+    color: $color-nhsbt-black;
+    box-shadow: none;
+  }
+
+  svg {
+    width: 18px !important;
+    height: 18px !important;
+    max-width: 18px !important;
+    max-height: 18px !important;
+    fill: currentColor;
+    flex-shrink: 0;
+  }
+}
+
+// =========================================================
+// Department Buttons (related sites — matches nhsbt.nhs.uk)
+// 3-column layout, each with its own brand colour border
+// =========================================================
+
+.nhsbt-footer__related-sites {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  list-style: none;
+  padding: 0;
+  margin: 32px 0 36px;
+}
+
+.nhsbt-footer__site-item {
+  width: 30%;
+}
+
+.nhsbt-footer__site-btn {
+  position: relative;
+  display: block;
+  min-height: 48px;
+  text-align: center;
+  text-decoration: none;
+  color: $color-nhsbt-grey;
+  background-color: $color-nhsbt-white;
+  border: 1px solid $color-nhsbt-grey;
+  border-radius: 3px;
+  padding: 10px;
+  margin-bottom: 12px;
+  font-weight: 600;
+  font-size: 16px;
+
+  &:hover {
+    text-decoration: underline;
+  }
+
+  &:focus {
+    color: $color-nhsbt-black;
+    border-color: transparent;
+    outline: 3px solid $color-nhsbt-black;
+    background-color: $color-nhsbt-yellow;
+    box-shadow: none;
+    text-decoration: none;
+  }
+
+  // Individual brand colours (matching real NHSBT site)
+  &--red {
+    color: $color-nhsbt-red;
+    border-color: $color-nhsbt-red;
+  }
+
+  &--pink {
+    color: $color-nhsbt-pink;
+    border-color: $color-nhsbt-pink;
+  }
+
+  &--orange {
+    color: $color-nhsbt-orange-text;
+    border-color: $color-nhsbt-orange;
+  }
+
+  &--blue {
+    color: $color-nhsbt-blue;
+    border-color: $color-nhsbt-blue;
+  }
+}
+
+// --- Corporate logo (right-aligned, linked) ---
+.nhsbt-footer__logo {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 20px;
+
+  img,
+  svg {
+    height: 48px;
+    width: auto;
+    display: block;
+  }
+}
+
+// --- Prototype-only meta area ---
+.nhsbt-footer__meta {
+  padding-top: 16px;
+  border-top: 1px solid $color-nhsbt-border-grey;
+
+  .nhsbt-footer__link-list {
+    justify-content: flex-start;
+
+    li {
+      flex: 0 0 auto;
+    }
+  }
+}
+
+.nhsbt-footer__copyright {
+  color: $color-nhsbt-grey;
+  font-size: 13px;
+  margin-top: 8px;
+  margin-bottom: 0;
+}
+
+// =========================================================
+// Focus State Overrides (matching NHSBT pattern)
+// =========================================================
+
+// Only override focus for elements that don't have specific
+// NHSBT focus styles already defined above.
+// The generic NHS focus style is already provided by nhsuk-frontend.
+
+// =========================================================
+// Responsive
+// =========================================================
+
+@media (max-width: 768px) {
+  .nhsbt-header {
+    padding: 10px 0;
+  }
+
+  .nhsbt-header__logo-img {
+    height: 32px;
+  }
+
+  .nhsbt-nav-bar__link {
+    font-size: 15px;
+  }
+
+  .nhsbt-footer__link-list {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+
+    li {
+      border-right: none;
+      padding: 0;
+      margin: 0 0 6px;
+    }
+  }
+
+  .nhsbt-footer__related-sites {
+    flex-direction: column;
+  }
+
+  .nhsbt-footer__site-item {
+    width: 100%;
+  }
+
+  .nhsbt-footer__social {
+    justify-content: flex-start;
+  }
+
+  .nhsbt-footer__logo {
+    justify-content: flex-start;
+  }
+}
+
+// =========================================================
+// Add your custom styles below
+// =========================================================
