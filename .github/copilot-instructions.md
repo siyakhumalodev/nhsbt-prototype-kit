@@ -83,9 +83,9 @@ nhsbt-prototype-kit/
 
 ### 1. Branding
 
-- The header MUST use the NHSBT dark blue (`#003087`) background, not NHS blue.
-- The header MUST display "NHS Blood and Transplant" as the organisation name with the NHSBT logo.
-- The service name (from `app/config.js`) appears as a secondary heading in the header.
+- The header MUST use a white background with box-shadow, matching the nhsbt.nhs.uk website.
+- The header MUST display the NHSBT logo (dark-text SVG) at 40px height.
+- The service name (from `app/config.js`) appears in a separate blue (`#005EB8`) navigation bar below the header.
 - The footer MUST include NHSBT social media links, corporate logo, and legal links.
 - See `docs/03-branding-design-guide.md` for full colour palette, typography, and component styling.
 
@@ -197,7 +197,7 @@ router.post('/step-1', function(req, res) {
 After making changes:
 1. Run `npm install` if dependencies changed.
 2. Run `npm start` to verify the development server starts.
-3. Check the browser at `http://localhost:3000`.
+3. Check the browser at `http://localhost:4000`.
 4. Verify NHSBT branding is correctly displayed.
 5. Test any new pages are accessible via their URL paths.
 6. Test form data persistence through multi-step flows.
