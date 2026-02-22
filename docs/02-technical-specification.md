@@ -9,7 +9,7 @@ The NHSBT Prototype Kit is a Node.js web application that acts as a thin customi
 ```
 ┌─────────────────────────────────────────────────────────┐
 │                    User's Browser                        │
-│   (BrowserSync proxy in dev: localhost:3000)             │
+│   (BrowserSync proxy in dev: localhost:4000)             │
 └────────────────────────┬────────────────────────────────┘
                          │
                          ▼
@@ -30,7 +30,7 @@ The NHSBT Prototype Kit is a Node.js web application that acts as a thin customi
 │  ┌──────────────────┐  ┌─────────────────────────────┐  │
 │  │  Static Assets   │  │  Nunjucks Template Engine    │  │
 │  │  /assets/        │  │  Views: app/views/           │  │
-│  │  /nhsbt-frontend │  │  Components: frontend macros │  │
+│  │  /nhsuk-frontend │  │  Components: frontend macros │  │
 │  │  /images/        │  │  Filters: built-in + custom  │  │
 │  └──────────────────┘  └─────────────────────────────┘  │
 └─────────────────────────────────────────────────────────┘
@@ -51,7 +51,7 @@ The NHSBT Prototype Kit is a Node.js web application that acts as a thin customi
 | Runtime | Node.js | ^22.11.0 or ^24.11.0 | JavaScript runtime |
 | Web Framework | Express.js | ^5.2.0 | HTTP server and routing |
 | Templating | Nunjucks | ^3.2.4 | Server-side HTML templates |
-| Frontend Library | nhsuk-frontend (customised for NHSBT) | ^10.3.x | Design system components, CSS, JS |
+| Frontend Library | nhsuk-frontend (with NHSBT CSS overrides) | ^10.3.x | Design system components, CSS, JS |
 | Asset Bundler | esbuild | ^0.27.x | Sass compilation & JS bundling |
 | Sass Compiler | sass-embedded via esbuild-sass-plugin | ^1.97.x / ^3.3.x | SCSS to CSS |
 | Live Reload | BrowserSync | ^3.0.x | Proxy + auto-reload in dev |
@@ -97,9 +97,9 @@ nhsbt-prototype-kit/
 ├── docs/                               # Documentation
 │
 └── node_modules/
-    ├── nhsbt-prototype-kit/            # Core kit engine package
+    ├── nhsuk-prototype-kit/            # Core kit engine package
     │   └── lib/
-    │       ├── nhsbt-prototype-kit.js  # Main kit class
+    │       ├── nhsuk-prototype-kit.js  # Main kit class
     │       ├── index.js                # Package entry
     │       ├── build/                  # esbuild configuration
     │       ├── express-settings/       # Express config helpers
@@ -109,9 +109,9 @@ nhsbt-prototype-kit/
     │       ├── views/                  # Kit-level templates (404, 500, etc.)
     │       └── javascripts/            # Kit-level browser JS
     │
-    └── nhsbt-frontend/                 # NHSBT design system (new package)
-        └── dist/nhsbt/
-            ├── nhsbt-frontend.min.js   # Frontend JavaScript
+    └── nhsuk-frontend/                 # NHS.UK design system (base component library)
+        └── dist/nhsuk/
+            ├── nhsuk-frontend.min.js   # Frontend JavaScript
             ├── assets/                 # Icons, images, fonts
             ├── components/             # Nunjucks component macros
             └── macros/                 # Macro entry points
@@ -126,7 +126,7 @@ nhsbt-prototype-kit/
 The entry point initialises the prototype kit by passing configuration options to the core engine:
 
 ```javascript
-const NHSBTPrototypeKit = require('nhsbt-prototype-kit')
+const NHSUKPrototypeKit = require('nhsuk-prototype-kit')
 
 const config = require('./app/config')
 const sessionDataDefaults = require('./app/data/session-data-defaults')
@@ -142,7 +142,7 @@ const entryPoints = [
 ]
 
 async function init() {
-  const prototype = await NHSBTPrototypeKit.init({
+  const prototype = await NHSUKPrototypeKit.init({
     serviceName: config.serviceName,
     buildOptions: { entryPoints },
     viewsPath,
@@ -169,11 +169,11 @@ module.exports = {
 
 ---
 
-## 4. Core Engine Package (`nhsbt-prototype-kit`)
+## 4. Core Engine Package (`nhsuk-prototype-kit`)
 
 ### 4.1 Initialisation Flow
 
-The `NHSBTPrototypeKit.init()` static method orchestrates startup:
+The `NHSUKPrototypeKit.init()` static method orchestrates startup:
 
 ```
 init(options)
@@ -187,10 +187,10 @@ init(options)
   │   ├─ Resolve view paths:
   │   │   1. app/views/  (user views)
   │   │   2. lib/views/  (kit views: 404, 500, etc.)
-  │   │   3. nhsbt-frontend/dist/nhsbt/components/
-  │   │   4. nhsbt-frontend/dist/nhsbt/macros/
-  │   │   5. nhsbt-frontend/dist/nhsbt/
-  │   │   6. nhsbt-frontend/dist/
+  │   │   3. nhsuk-frontend/dist/nhsuk/components/
+  │   │   4. nhsuk-frontend/dist/nhsuk/macros/
+  │   │   5. nhsuk-frontend/dist/nhsuk/
+  │   │   6. nhsuk-frontend/dist/
   │   └─ Configure Nunjucks with noCache: true
   │
   ├─ Set Express settings (view engine, query parser, trust proxy)
@@ -199,15 +199,15 @@ init(options)
   ├─ Add custom Nunjucks filters (from app/filters.js)
   │
   ├─ Mount static asset routes:
-  │   ├─ /nhsbt-frontend → nhsbt-frontend/dist/nhsbt/
-  │   ├─ /nhsbt-prototype-kit/javascripts → lib/javascripts/
+  │   ├─ /nhsuk-frontend → nhsuk-frontend/dist/nhsuk/
+  │   ├─ /nhsuk-prototype-kit/javascripts → lib/javascripts/
   │   ├─ / → public/
   │   ├─ /assets → app/assets/
   │   └─ /images → app/images/
   │
   ├─ Configure middleware stack (see §5)
   │
-  └─ Return NHSBTPrototypeKit instance
+  └─ Return NHSUKPrototypeKit instance
 ```
 
 ### 4.2 Development Mode (Watch)
@@ -220,7 +220,7 @@ In development mode (`NODE_ENV !== 'production'`):
 4. **wait-on** ensures BrowserSync only refreshes after the server is ready
 
 Port allocation:
-- BrowserSync proxy → `port` (default 4000, user-facing)
+- BrowserSync proxy → `port` (default `4000`, user-facing)
 - Express server → `port + 1` (internal)
 
 ### 4.3 Production Mode
@@ -276,7 +276,7 @@ The `autoRoutes` middleware:
 
 ### 5.3 Session Configuration
 
-- **Session name**: Generated from a hash of `serviceName` (prefixed with `nhsbt-prototype-kit-`)
+- **Session name**: Generated from a hash of `serviceName` (prefixed with `nhsuk-prototype-kit-`)
 - **Secret**: Same as session name (acceptable for prototyping only)
 - **Cookie max-age**: 4 hours (14,400,000ms)
 - **Storage**: In-memory (MemoryStore — data lost on restart)
@@ -290,7 +290,7 @@ The `autoRoutes` middleware:
 ### 6.1 Template Inheritance Chain
 
 ```
-nhsbt-frontend/dist/nhsbt/template.njk       ← Base HTML5 document
+nhsuk-frontend/dist/nhsuk/template.njk       ← Base HTML5 document
   └─ lib/views/prototype-kit-template.njk     ← Imports all component macros
       └─ app/views/layout.html                ← NHSBT-branded header/footer
           └─ app/views/[page].html            ← Individual page content
@@ -354,13 +354,13 @@ const entryPoints = [
 ```scss
 // app/assets/sass/main.scss
 
-// Import the NHSBT frontend library (customised from NHS.UK frontend)
-@import "nhsbt-frontend/dist/nhsbt";
+// Import the NHS.UK frontend library (base component library)
+@import "nhsuk-frontend/dist/nhsuk";
 
-// Add custom SCSS below
+// Add NHSBT colour overrides and custom styles below
 ```
 
-The NHSBT frontend library provides all base styles including:
+The nhsuk-frontend library provides all base styles including:
 - Typography (Frutiger / fallback system fonts)
 - Grid system (nhsuk-grid-row, nhsuk-grid-column-*)
 - Colour variables
@@ -375,7 +375,7 @@ The NHSBT frontend library provides all base styles including:
 ```
 
 The kit loads:
-1. `nhsbt-frontend.min.js` — Frontend library initialisation
+1. `nhsuk-frontend.min.js` — Frontend library initialisation
 2. `send-unchecked-checkboxes.js` — Kit utility for form prototyping
 3. `application.js` — Bundled user JavaScript
 
@@ -388,8 +388,8 @@ The kit loads:
 ```json
 {
   "dependencies": {
-    "nhsbt-frontend": "^1.0.0",
-    "nhsbt-prototype-kit": "^1.0.0"
+    "nhsuk-frontend": "^10.3.1",
+    "nhsuk-prototype-kit": "^8.0.1"
   },
   "engines": {
     "node": "^22.11.0 || ^24.11.0"
@@ -397,7 +397,7 @@ The kit loads:
 }
 ```
 
-### 8.2 Core Kit Package Dependencies (`nhsbt-prototype-kit`)
+### 8.2 Core Kit Package Dependencies (`nhsuk-prototype-kit`)
 
 | Package | Purpose |
 |---|---|
@@ -417,7 +417,7 @@ The kit loads:
 | Package | Version | Purpose |
 |---|---|---|
 | `express` | ^5.2.0 | Web framework |
-| `nhsbt-frontend` | ^1.0.0 | Design system components |
+| `nhsuk-frontend` | ^10.3.1 | Design system components |
 | `nunjucks` | ^3.2.4 | Templating engine |
 
 ---
@@ -452,37 +452,17 @@ The kit loads:
 
 ---
 
-## 11. Creating the NHSBT Frontend Package
+## 11. Frontend Approach: CSS Override Layer (Option C)
 
-Since NHSBT has its own branding distinct from NHS.UK, a new `nhsbt-frontend` npm package needs to be created. This package should:
+The kit uses **Option C** — a CSS override layer on top of the standard `nhsuk-frontend` package. This is the most pragmatic approach for a prototype kit:
 
-### 11.1 Approach Options
+- **Base**: `nhsuk-frontend` (^10.3.1) provides all NHS Design System components, Nunjucks macros, grid system, typography, and base styles
+- **Overrides**: `app/assets/sass/main.scss` imports `nhsuk-frontend/dist/nhsuk` first, then layers NHSBT-specific colour variables and custom component styles on top
+- **Header**: A custom NHSBT header is implemented directly in `app/views/layout.html` (white background with box-shadow, NHSBT logo, and a blue service name nav bar)
+- **Footer**: A custom NHSBT footer is implemented in `layout.html` (links, social icons, colour-coded department buttons, corporate logo)
+- **Logo**: NHSBT logo SVG assets are placed in `app/assets/images/`
 
-**Option A: Fork `nhsuk-frontend` (Recommended)**
-1. Fork `nhsuk-frontend` from GitHub
-2. Replace NHS.UK branding with NHSBT branding (colours, logo, typography)
-3. Update component templates to use NHSBT class prefixes or keep `nhsuk-` prefixes with customised styles
-4. Publish as `nhsbt-frontend`
-
-**Option B: Wrapper/Override Package**
-1. Create `nhsbt-frontend` that depends on `nhsuk-frontend`
-2. Override only the Sass variables (colours, fonts)
-3. Provide a custom header/footer component
-4. Re-export everything else from `nhsuk-frontend`
-
-**Option C: CSS Override Layer (Simplest)**
-1. Keep `nhsuk-frontend` as the base
-2. In the prototype kit template, layer NHSBT-specific CSS overrides on top
-3. Replace the header/footer Nunjucks macro invocations in `layout.html`
-
-### 11.2 Recommended: Option C for Prototype Kit
-
-For a **prototype kit** (not production), Option C is the most pragmatic:
-- Use `nhsuk-frontend` as-is for the component library
-- Override colours and branding via custom Sass variables and overrides in `main.scss`
-- Replace the header component with a custom NHSBT header
-- Replace the footer component with a custom NHSBT footer
-- Add the NHSBT logo as a static asset
+This avoids the overhead of forking or wrapping `nhsuk-frontend` while still achieving full NHSBT branding.
 
 ---
 

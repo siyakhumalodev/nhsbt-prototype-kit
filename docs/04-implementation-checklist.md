@@ -48,25 +48,29 @@ This document provides a step-by-step checklist for building the NHSBT Prototype
 ## Phase 4: NHSBT Branding
 
 - [ ] Add NHSBT logo files to `app/assets/images/`:
-  - `nhsbt-logo.svg` (white version for header)
+  - `nhsbt-logo.svg` (dark-text version for white header background)
+  - `nhsbt-logo-white.svg` (white version for dark backgrounds, not currently used)
   - `nhsbt-corporate-logo.svg` (footer)
   - `favicon.ico`
 - [ ] Create `app/assets/sass/main.scss` with:
-  - Import of `nhsuk-frontend`
-  - NHSBT colour variable overrides
-  - Custom `.nhsbt-header` styles
-  - Custom `.nhsbt-footer` styles
+  - Import of `nhsuk-frontend/dist/nhsuk`
+  - NHSBT colour variable overrides (15 variables — see Branding Guide §3.3)
+  - Custom `.nhsbt-header` styles (white background, box-shadow, 40px logo)
+  - Custom `.nhsbt-nav-bar` styles (blue service name bar)
+  - Custom `.nhsbt-footer` styles (links, social icons, department buttons, corporate logo)
   - Focus state overrides
+  - Responsive breakpoints
 - [ ] Create `app/assets/javascript/main.js` (empty, for custom JS)
 
 ## Phase 5: Templates
 
 - [ ] Create `app/views/layout.html`:
   - Extend `prototype-kit-template.njk`
-  - Override `{% block header %}` with NHSBT header
-  - Override `{% block footer %}` with NHSBT footer
-  - Include custom CSS link
-  - Include custom JS link
+  - Add `{% block head %}` with `<link>` to compiled CSS (`/assets/sass/main.css`)
+  - Override `{% block header %}` with NHSBT header (white bg, logo, separate blue nav bar)
+  - Override `{% block footer %}` with NHSBT footer (links, social, department buttons, corporate logo)
+  - Include back-to-top link in footer
+  - Include prototype-specific meta section with Home and Reset data links
 - [ ] Create `app/views/index.html`:
   - Extend `layout.html`
   - Show service name heading
@@ -87,10 +91,11 @@ This document provides a step-by-step checklist for building the NHSBT Prototype
 ## Phase 7: Testing & Validation
 
 - [ ] Run `npm install` successfully
-- [ ] Run `npm start` and verify server starts on port 3000
+- [ ] Run `npm start` and verify server starts on port `4000`
 - [ ] Verify index page renders with NHSBT branding
-- [ ] Verify header shows NHSBT logo and service name
-- [ ] Verify footer shows NHSBT links and corporate logo
+- [ ] Verify header shows NHSBT logo on white background with box-shadow
+- [ ] Verify blue service name nav bar appears below header
+- [ ] Verify footer shows links, social icons, department buttons, and corporate logo
 - [ ] Verify NHSBT colour scheme is applied
 - [ ] Create a test page to verify auto-routing works
 - [ ] Create a test form to verify session data storage works
