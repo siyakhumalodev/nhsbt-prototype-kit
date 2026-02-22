@@ -163,7 +163,7 @@ init()
 ```javascript
 module.exports = {
   serviceName: 'Service name goes here',
-  port: 3000
+  port: 4000
 }
 ```
 
@@ -220,7 +220,7 @@ In development mode (`NODE_ENV !== 'production'`):
 4. **wait-on** ensures BrowserSync only refreshes after the server is ready
 
 Port allocation:
-- BrowserSync proxy → `port` (default 3000, user-facing)
+- BrowserSync proxy → `port` (default 4000, user-facing)
 - Express server → `port + 1` (internal)
 
 ### 4.3 Production Mode
@@ -495,7 +495,7 @@ git clone <repository-url>
 cd nhsbt-prototype-kit
 npm install
 npm start
-# Opens at http://localhost:3000
+# Opens at http://localhost:4000
 ```
 
 ### 12.2 Production Deployment
