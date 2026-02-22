@@ -30,7 +30,7 @@ npm install
 npm start
 ```
 
-The kit will start at [http://localhost:3000](http://localhost:3000).
+The kit will start at [http://localhost:4000](http://localhost:4000).
 
 Changes to HTML, Sass, and JavaScript files are automatically detected and the browser refreshes.
 
@@ -79,7 +79,7 @@ router.post('/step-1', function (req, res) {
 | Setting | File | Description |
 |---|---|---|
 | Service name | `app/config.js` | Appears in the header and page titles |
-| Port | `app/config.js` | Development server port (default: 3000) |
+| Port | `app/config.js` | Development server port (default: 4000) |
 | Default data | `app/data/session-data-defaults.js` | Pre-populated form data |
 | Custom routes | `app/routes.js` | Express route handlers |
 | Custom filters | `app/filters.js` | Nunjucks template filters |

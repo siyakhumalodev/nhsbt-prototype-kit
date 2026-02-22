@@ -27,8 +27,9 @@ The logo must always appear in the header of the prototype kit, replacing the st
 
 **Logo placement**:
 - Top-left of the header bar
-- White text/logo on the NHSBT branded header background
+- Dark-text logo on a white header background (with box-shadow)
 - The logo links to the homepage (`/`)
+- The service name appears in a separate blue navigation bar below the header
 
 ### 2.2 Brand Relationship to NHS
 
@@ -48,22 +49,25 @@ Based on the nhsbt.nhs.uk website analysis:
 
 | Colour | Hex | Usage |
 |---|---|---|
-| **NHSBT Dark Blue** | `#003087` | Primary header background, primary buttons, headings |
-| **NHSBT Blue** | `#005EB8` | Links, interactive elements, NHS blue identity |
+| **NHSBT Dark Blue** | `#003087` | Social media icon backgrounds, focus outlines |
+| **NHSBT Blue** | `#005EB8` | Service name nav bar background, links, interactive elements |
 | **NHSBT Light Blue** | `#41B6E6` | Accent, highlights, secondary actions |
-| **White** | `#FFFFFF` | Page background, text on dark backgrounds |
+| **White** | `#FFFFFF` | Header background, page background, department button backgrounds |
 | **NHSBT Dark Grey** | `#231F20` | Body text colour |
-| **NHSBT Grey** | `#4C6272` | Secondary text, metadata |
+| **NHSBT Grey** | `#5f5f5f` | Secondary text, copyright text, department button default colour |
+| **Black** | `#000000` | Footer link text, border separators |
 
 ### 3.2 Supporting Colours
 
 | Colour | Hex | Usage |
 |---|---|---|
-| **NHSBT Red** | `#DA291C` | Blood donation theme, error states, warnings |
+| **NHSBT Red** | `#d81e05` | Blood donation theme, error states, department button accent |
 | **NHSBT Green** | `#009639` | Success states, organ donation theme |
 | **NHSBT Yellow** | `#FAE100` | Warning callouts, focus states |
-| **NHSBT Pink** | `#AE2573` | Feature areas, campaign highlights |
-| **Pale Grey** | `#F0F4F5` | Section backgrounds, card backgrounds |
+| **NHSBT Pink** | `#56008c` | Organ donation department button accent |
+| **NHSBT Orange** | `#f59c00` | Platelet donation department button border |
+| **NHSBT Orange Text** | `#a66704` | Platelet donation department button text (AA-compliant) |
+| **Pale Grey** | `#F0F4F5` | Footer background, section backgrounds, card backgrounds |
 | **Border Grey** | `#D8DDE0` | Borders, dividers |
 
 ### 3.3 Sass Variable Overrides
@@ -74,14 +78,18 @@ Based on the nhsbt.nhs.uk website analysis:
 $color-nhsbt-dark-blue: #003087;
 $color-nhsbt-blue: #005EB8;
 $color-nhsbt-light-blue: #41B6E6;
-$color-nhsbt-red: #DA291C;
+$color-nhsbt-red: #d81e05;
 $color-nhsbt-green: #009639;
 $color-nhsbt-yellow: #FAE100;
-$color-nhsbt-pink: #AE2573;
+$color-nhsbt-pink: #56008c;
+$color-nhsbt-orange: #f59c00;
+$color-nhsbt-orange-text: #a66704;
 $color-nhsbt-dark-grey: #231F20;
-$color-nhsbt-grey: #4C6272;
+$color-nhsbt-grey: #5f5f5f;
 $color-nhsbt-pale-grey: #F0F4F5;
 $color-nhsbt-border-grey: #D8DDE0;
+$color-nhsbt-white: #FFFFFF;
+$color-nhsbt-black: #000000;
 ```
 
 ---
@@ -123,24 +131,23 @@ Following the NHS Design System's type scale:
 
 ### 5.1 NHSBT Header Structure
 
-The NHSBT header differs from the standard NHS.UK header:
+The NHSBT header differs from the standard NHS.UK header. It consists of a white header bar with the NHSBT logo and a separate blue service name navigation bar below:
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
 │ [Skip to main content]                                          │
-├─────────────────────────────────────────────────────────────────┤
+├─────────────────────────── WHITE BG ────────────────────────────┤
+│                       (box-shadow below)                         │
+│  [NHSBT Logo - dark text, 40px height]                          │
 │                                                                 │
-│  [NHSBT Logo]  NHS Blood and Transplant    [MENU ☰]            │
-│                                                                 │
-├─────────────────────────────────────────────────────────────────┤
-│  (Optional: Service name banner below header)                    │
-│  (Optional: Navigation links)                                    │
+├──────────────────────── BLUE (#005EB8) ─────────────────────────┤
+│  Service Name (white text, bold, linked to /)                    │
 └─────────────────────────────────────────────────────────────────┘
 ```
 
 ### 5.2 Header Implementation
 
-The prototype kit should provide a custom header in `layout.html`:
+The prototype kit provides a custom header in `layout.html`:
 
 ```html
 {% block header %}
@@ -148,24 +155,18 @@ The prototype kit should provide a custom header in `layout.html`:
     <div class="nhsuk-width-container nhsbt-header__container">
       <div class="nhsbt-header__logo">
         <a class="nhsbt-header__link" href="/" aria-label="NHS Blood and Transplant homepage">
-          <!-- NHSBT Logo SVG or image -->
-          <span class="nhsbt-header__logotype">
-            NHS Blood and Transplant
-          </span>
+          <img class="nhsbt-header__logo-img" src="/assets/images/nhsbt-logo.svg" alt="NHS Blood and Transplant">
         </a>
-      </div>
-      {% if serviceName %}
-        <div class="nhsbt-header__service-name">
-          <a class="nhsbt-header__service-link" href="/">{{ serviceName }}</a>
-        </div>
-      {% endif %}
-      <div class="nhsbt-header__menu">
-        <button class="nhsbt-header__menu-toggle" aria-controls="header-navigation" aria-expanded="false">
-          MENU
-        </button>
       </div>
     </div>
   </header>
+  {% if serviceName %}
+    <div class="nhsbt-nav-bar">
+      <div class="nhsuk-width-container">
+        <a class="nhsbt-nav-bar__link" href="/">{{ serviceName }}</a>
+      </div>
+    </div>
+  {% endif %}
 {% endblock %}
 ```
 
@@ -173,8 +174,12 @@ The prototype kit should provide a custom header in `layout.html`:
 
 ```scss
 .nhsbt-header {
-  background-color: $color-nhsbt-dark-blue;
-  padding: 20px 0;
+  position: relative;
+  z-index: 800;
+  background-color: $color-nhsbt-white;
+  box-shadow: 0 0 10px 3px rgba(0, 0, 0, 0.18);
+  padding: 15px 0;
+  height: auto;
 }
 
 .nhsbt-header__container {
@@ -184,37 +189,45 @@ The prototype kit should provide a custom header in `layout.html`:
 }
 
 .nhsbt-header__link {
-  color: #fff;
+  display: inline-block;
   text-decoration: none;
-  display: flex;
-  align-items: center;
+  color: $color-nhsbt-blue;
+
+  &:hover { text-decoration: underline; }
+  &:focus {
+    outline: 3px solid $color-nhsbt-black;
+    outline-offset: 0;
+    background-color: transparent;
+    box-shadow: none;
+  }
 }
 
-.nhsbt-header__logotype {
-  font-size: 22px;
-  font-weight: 700;
-  color: #fff;
+.nhsbt-header__logo-img {
+  height: 40px;
+  width: auto;
+  display: block;
 }
 
-.nhsbt-header__service-name {
-  margin-left: 32px;
+// Service name nav bar (blue bar below header)
+.nhsbt-nav-bar {
+  background-color: $color-nhsbt-blue;
+  padding: 10px 0;
 }
 
-.nhsbt-header__service-link {
-  color: #fff;
-  font-size: 19px;
+.nhsbt-nav-bar__link {
+  color: $color-nhsbt-white;
+  font-size: 17px;
   font-weight: 700;
   text-decoration: none;
-}
+  display: inline-block;
 
-.nhsbt-header__menu-toggle {
-  background: none;
-  border: 2px solid #fff;
-  color: #fff;
-  padding: 8px 16px;
-  font-size: 16px;
-  font-weight: 700;
-  cursor: pointer;
+  &:hover { text-decoration: underline; color: $color-nhsbt-white; }
+  &:visited { color: $color-nhsbt-white; }
+  &:focus {
+    outline: 3px solid $color-nhsbt-black;
+    color: $color-nhsbt-black;
+    background-color: $color-nhsbt-yellow;
+  }
 }
 ```
 
@@ -226,18 +239,23 @@ The prototype kit should provide a custom header in `layout.html`:
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
-│  Social Media Links:                                             │
-│  [Facebook] [X/Twitter] [YouTube] [LinkedIn]                     │
+│                                         [Back to top] (right)    │
 ├─────────────────────────────────────────────────────────────────┤
-│  [NHSBT Corporate Logo]                                          │
-├─────────────────────────────────────────────────────────────────┤
-│  Additional Links:                                               │
+│  Footer Links (centred, separated by border-right):              │
 │  Contact us | Accessibility statement | Cookies | Privacy        │
 │  Jobs | Diversity and inclusion | Site map                       │
 ├─────────────────────────────────────────────────────────────────┤
-│  Related Sites:                                                  │
-│  Blood Donation | Organ Donation | Platelet Donation             │
-│  Plasma Donation | Careers | ODT Clinical                        │
+│  Social Media Icons (right-aligned, dark blue circles):          │
+│              [Facebook] [X/Twitter] [YouTube] [LinkedIn]         │
+├─────────────────────────────────────────────────────────────────┤
+│  Related Sites (3-column, colour-coded border buttons):          │
+│  [Blood Donation]  [Organ Donation]   [Platelet Donation]        │
+│  [Plasma Donation] [Careers]          [ODT Clinical]             │
+├─────────────────────────────────────────────────────────────────┤
+│                                    [NHSBT Corporate Logo] (right)│
+├─────────────────────────────────────────────────────────────────┤
+│  Prototype meta: Home | Reset data                               │
+│  © NHS Blood and Transplant. This is a prototype.                │
 └─────────────────────────────────────────────────────────────────┘
 ```
 
@@ -246,53 +264,88 @@ The prototype kit should provide a custom header in `layout.html`:
 ```html
 {% block footer %}
   <footer class="nhsbt-footer" role="contentinfo">
+    <a class="nhsbt-footer__back-to-top" href="#top">Back to top</a>
     <div class="nhsuk-width-container">
-      
-      <!-- Social media links -->
-      <div class="nhsbt-footer__social">
-        <a href="https://www.facebook.com/nhsbloodandtransplant/" class="nhsbt-footer__social-link" target="_blank" rel="noopener">
-          <span class="nhsuk-u-visually-hidden">Facebook</span>
-          <!-- Facebook icon SVG -->
-        </a>
-        <a href="https://twitter.com/NHSBT" class="nhsbt-footer__social-link" target="_blank" rel="noopener">
-          <span class="nhsuk-u-visually-hidden">X (Twitter)</span>
-          <!-- X icon SVG -->
-        </a>
-        <a href="https://www.youtube.com/@nhsbloodandtransplant3483/videos" class="nhsbt-footer__social-link" target="_blank" rel="noopener">
-          <span class="nhsuk-u-visually-hidden">YouTube</span>
-          <!-- YouTube icon SVG -->
-        </a>
-        <a href="https://uk.linkedin.com/company/nhs-blood-and-transplant" class="nhsbt-footer__social-link" target="_blank" rel="noopener">
-          <span class="nhsuk-u-visually-hidden">LinkedIn</span>
-          <!-- LinkedIn icon SVG -->
-        </a>
-      </div>
-      
-      <!-- Corporate logo -->
-      <div class="nhsbt-footer__logo">
-        <!-- NHSBT Corporate Logo -->
-      </div>
-      
-      <!-- Links -->
+
+      {# Footer links — horizontal row separated by borders #}
       <div class="nhsbt-footer__links">
-        <ul class="nhsbt-footer__list">
-          <li><a href="/contact-us">Contact us</a></li>
-          <li><a href="/accessibility">Accessibility statement</a></li>
-          <li><a href="/cookies">Cookies</a></li>
-          <li><a href="/privacy">Privacy</a></li>
+        <ul class="nhsbt-footer__link-list">
+          <li><a href="https://www.nhsbt.nhs.uk/contact-us/">Contact us</a></li>
+          <li><a href="https://www.nhsbt.nhs.uk/accessibility/">Accessibility statement</a></li>
+          <li><a href="https://www.nhsbt.nhs.uk/cookies/">Cookies</a></li>
+          <li><a href="https://www.nhsbt.nhs.uk/privacy/">Privacy</a></li>
+          <li><a href="https://careers.nhsbt.nhs.uk/">Jobs</a></li>
+          <li><a href="https://www.nhsbt.nhs.uk/who-we-are/our-values/diversity-and-inclusion/">Diversity and inclusion</a></li>
+          <li><a href="https://www.nhsbt.nhs.uk/site-map/">Site map</a></li>
         </ul>
       </div>
-      
-      <!-- Prototype kit specific -->
+
+      {# Social media icons — right aligned, dark blue circles with white SVG icons #}
+      <div class="nhsbt-footer__social">
+        <a href="https://www.facebook.com/nhsbloodandtransplant/" class="nhsbt-footer__social-link" target="_blank" rel="noopener" aria-label="Facebook">
+          <!-- Facebook SVG icon -->
+        </a>
+        <a href="https://twitter.com/NHSBT" class="nhsbt-footer__social-link" target="_blank" rel="noopener" aria-label="X (Twitter)">
+          <!-- X SVG icon -->
+        </a>
+        <a href="https://www.youtube.com/@nhsbloodandtransplant3483/videos" class="nhsbt-footer__social-link" target="_blank" rel="noopener" aria-label="YouTube">
+          <!-- YouTube SVG icon -->
+        </a>
+        <a href="https://uk.linkedin.com/company/nhs-blood-and-transplant" class="nhsbt-footer__social-link" target="_blank" rel="noopener" aria-label="LinkedIn">
+          <!-- LinkedIn SVG icon -->
+        </a>
+      </div>
+
+      {# Related Sites — colour-coded department buttons (3-column) #}
+      <nav class="nhsbt-footer__related-sites" aria-label="NHS BT websites navigation">
+        <div class="nhsbt-footer__site-item">
+          <a href="https://www.blood.co.uk/" class="nhsbt-footer__site-btn nhsbt-footer__site-btn--red" target="_blank" rel="noopener">Blood Donation</a>
+        </div>
+        <div class="nhsbt-footer__site-item">
+          <a href="https://www.organdonation.nhs.uk/" class="nhsbt-footer__site-btn nhsbt-footer__site-btn--pink" target="_blank" rel="noopener">Organ Donation</a>
+        </div>
+        <div class="nhsbt-footer__site-item">
+          <a href="https://www.platelets.blood.co.uk/" class="nhsbt-footer__site-btn nhsbt-footer__site-btn--orange" target="_blank" rel="noopener">Platelet Donation</a>
+        </div>
+        <div class="nhsbt-footer__site-item">
+          <a href="https://www.blood.co.uk/plasma/" class="nhsbt-footer__site-btn nhsbt-footer__site-btn--blue" target="_blank" rel="noopener">Plasma Donation</a>
+        </div>
+        <div class="nhsbt-footer__site-item">
+          <a href="https://careers.nhsbt.nhs.uk/" class="nhsbt-footer__site-btn nhsbt-footer__site-btn--blue" target="_blank" rel="noopener">Careers</a>
+        </div>
+        <div class="nhsbt-footer__site-item">
+          <a href="https://www.odt.nhs.uk/" class="nhsbt-footer__site-btn nhsbt-footer__site-btn--blue" target="_blank" rel="noopener">ODT Clinical</a>
+        </div>
+      </nav>
+
+      {# Corporate logo — bottom right #}
+      <div class="nhsbt-footer__logo">
+        <a href="/">
+          <img src="/assets/images/nhsbt-corporate-logo.svg" alt="NHSBT Corporate Logo" title="NHS Blood and Transplant">
+        </a>
+      </div>
+
+      {# Prototype kit specific links #}
       <div class="nhsbt-footer__meta">
-        <ul class="nhsbt-footer__list">
+        <ul class="nhsbt-footer__link-list">
           <li><a href="/">Home</a></li>
           <li><a href="/prototype-admin/reset?returnPage={{ currentPage | urlencode }}">Reset data</a></li>
         </ul>
+        <p class="nhsbt-footer__copyright">
+          &copy; NHS Blood and Transplant. This is a prototype — not a real service.
+        </p>
       </div>
-      
+
     </div>
   </footer>
+{% endblock %}
+```
+
+**Note**: The `layout.html` also includes a `{% block head %}` that loads the compiled CSS:
+
+```html
+{% block head %}
+  <link rel="stylesheet" href="/assets/sass/main.css">
 {% endblock %}
 ```
 
@@ -379,7 +432,7 @@ Max width: 960px (centred)
 | Primary | `#005EB8` (NHSBT Blue) | White | None |
 | Secondary | Transparent | `#005EB8` | `#005EB8` |
 | Reverse | White | `#005EB8` | None |
-| Warning | `#DA291C` (NHSBT Red) | White | None |
+| Warning | `#d81e05` (NHSBT Red) | White | None |
 
 ### 9.2 Links
 
@@ -419,16 +472,14 @@ The NHSBT cookie banner and notification banners use:
 
 ### 10.1 Logo Files Required
 
-The prototype kit must include these logo assets in `app/assets/images/`:
+The prototype kit includes these logo assets in `app/assets/images/`:
 
 | File | Format | Usage |
 |---|---|---|
-| `nhsbt-logo.svg` | SVG | Header logo (primary) |
-| `nhsbt-logo-white.svg` | SVG | Header logo on dark background |
+| `nhsbt-logo.svg` | SVG | Header logo (dark-text version, for white header background) |
+| `nhsbt-logo-white.svg` | SVG | Logo variant for dark backgrounds (available but not currently used) |
 | `nhsbt-corporate-logo.svg` | SVG | Footer corporate logo |
-| `nhsbt-logo.png` | PNG | Fallback for email/print |
 | `favicon.ico` | ICO | Browser favicon |
-| `apple-touch-icon.png` | PNG | Mobile bookmark icon |
 
 ### 10.2 Icon Style
 

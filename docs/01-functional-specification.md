@@ -50,7 +50,7 @@ This document describes **what** the prototype kit does from a user/functional p
 | FR-08 | The kit uses Nodemon + BrowserSync for watch/reload in development mode | Must |
 | FR-09 | Sass files are compiled automatically via esbuild with the sass plugin | Must |
 | FR-10 | JavaScript entry points are bundled automatically via esbuild | Must |
-| FR-11 | The development server starts on a configurable port (default `3000`) | Must |
+| FR-11 | The development server starts on a configurable port (default `4000`) | Must |
 | FR-12 | If the default port is in use, the kit prompts the user to choose an alternative | Should |
 
 ### 2.3 Routing
@@ -152,7 +152,7 @@ The prototype kit must provide the following Nunjucks macros, pre-imported and r
 1. User clones the NHSBT Prototype Kit repository
 2. Runs `npm install` to install dependencies
 3. Runs `npm start` to start the development server
-4. Opens `http://localhost:3000` in a browser
+4. Opens `http://localhost:4000` in a browser
 5. Sees the NHSBT-branded index page with the configured service name
 
 ### 4.2 Creating a New Page
