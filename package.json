@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "nhsuk-frontend": "^10.3.1",
-    "nhsuk-prototype-kit": "^8.0.1"
+    "nhsuk-prototype-kit": "^8.0.2"
   },
   "engines": {
     "node": "^22.11.0 || ^24.11.0"
